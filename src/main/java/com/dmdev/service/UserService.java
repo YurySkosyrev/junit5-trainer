@@ -3,10 +3,12 @@ package com.dmdev.service;
 import com.dmdev.dao.UserDao;
 import com.dmdev.dto.CreateUserDto;
 import com.dmdev.dto.UserDto;
+import com.dmdev.entity.User;
 import com.dmdev.exception.ValidationException;
 import com.dmdev.mapper.CreateUserMapper;
 import com.dmdev.mapper.UserMapper;
 import com.dmdev.validator.CreateUserValidator;
+import com.dmdev.validator.ValidationResult;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -35,11 +37,11 @@ public class UserService {
 
     @SneakyThrows
     public UserDto create(CreateUserDto userDto) {
-        var validationResult = createUserValidator.validate(userDto);
+        ValidationResult validationResult = createUserValidator.validate(userDto);
         if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());
         }
-        var userEntity = createUserMapper.map(userDto);
+        User userEntity = createUserMapper.map(userDto);
         userDao.save(userEntity);
 
         return userMapper.map(userEntity);
