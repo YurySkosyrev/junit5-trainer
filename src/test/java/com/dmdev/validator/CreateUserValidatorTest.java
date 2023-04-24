@@ -5,6 +5,7 @@ import com.dmdev.entity.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,6 +25,8 @@ class CreateUserValidatorTest {
                 .role("ADMIN")
                 .build();
 
+        Error error = Error.of("invalid.birthday", "Birthday is invalid");
+
         //When
         ValidationResult validationResult = CreateUserValidator.getInstance().validate(createUserDto);
 
@@ -31,6 +34,7 @@ class CreateUserValidatorTest {
         assertThat(validationResult.getErrors().size()).isEqualTo(1);
         assertThat(validationResult.getErrors().get(0).getCode()).isEqualTo("invalid.birthday");
         assertThat(validationResult.getErrors().get(0).getMessage()).isEqualTo("Birthday is invalid");
+        assertThat(validationResult.getErrors().get(0)).isEqualTo(error);
         assertThat(validationResult.isValid()).isFalse();
 
     }
